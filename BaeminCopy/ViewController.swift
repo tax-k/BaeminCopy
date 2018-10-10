@@ -11,12 +11,19 @@ import UIKit
 struct Movie {
     let title: String
     let imageName: String
-    let startDate: Date
+    let startDate: String
     let tags: [String]
     let location: String
 }
 
 class ViewController: UIViewController {
+    
+    var movieList = [
+        
+        Movie(title: "수어사이드 스쿼드", imageName: "suicide", startDate: "2018", tags: ["DC", "HERO"], location: "Wanar Bros")
+    ]
+    
+    
     @IBOutlet weak var startButton: UIButton!
     
     @IBOutlet weak var indicateBar: UIView!
@@ -27,6 +34,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var Indicator3CenterConst: NSLayoutConstraint!
     @IBOutlet weak var Indicator4CenterConst: NSLayoutConstraint!
     
+    @IBAction func goToDetailAction(_ sender: Any) {
+        let detailVC = storyboard?.instantiateViewController(withIdentifier: "ProductDetailViewController") as! ProductDetailViewController
+        detailVC.MovieInfo = movieList[0]
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
     
     @IBAction func selectAction(_ sender: UIButton) {
         
@@ -43,7 +55,7 @@ class ViewController: UIViewController {
             let width = (title as NSString).size(withAttributes: attr).width
             let activateColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.7)
             
-            sender.setTitleColor(activateColor, for: .normal)
+//            sender.setTitleColor(activateColor, for: .normal)
             IndicatorWidthConst.constant = width
             
         }
