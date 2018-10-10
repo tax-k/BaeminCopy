@@ -20,6 +20,7 @@ class ProductDetailViewController: UIViewController {
     
     @IBOutlet weak var movieImageView: UIImageView!
     @IBOutlet weak var movieImageVIewHeightConst: NSLayoutConstraint!
+    @IBOutlet weak var overlayView: UIView!
     
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var headerBackView: UIView!
@@ -54,6 +55,23 @@ class ProductDetailViewController: UIViewController {
         
         titleLabel.alpha = 0
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if floatingMenuBase == 0.0 {
+            let ip = IndexPath(row: 1, section: 0)
+            if let cell = detailListView.cellForRow(at: ip) {
+                let frame = view.convert(cell.frame, to: view)
+                floatingMenuBase = frame.origin.y + detailListView.contentInset.top
+                floatingMenuTopConstraint.constant = floatingMenuBase
+                
+            }
+            
+        }
+        
+        
+    }
 }
 
 extension ProductDetailViewController: UIScrollViewDelegate {
@@ -85,7 +103,7 @@ extension ProductDetailViewController: UIScrollViewDelegate {
                     self?.titleLabel.text = self?.MovieInfo?.title
                     }, completion: nil)
                 
-                barStyle = .default
+                barStyle = .lightContent
                 setNeedsStatusBarAppearanceUpdate()
                 
             }
@@ -119,12 +137,13 @@ extension ProductDetailViewController: UITableViewDataSource {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: DetailTableViewCell.identifier) as! DetailTableViewCell
             
-//            cell.title.text = MovieInfo?.title
             cell.titleLabel.text = MovieInfo?.title
 ////
 ////            if let start = df.string(for: MovieInfo?.startDate), let end = df.string(for: course?.endDate) {
 ////                cell.periodLabel.text = "\(start) ~ \(end)"
 ////            }
+            cell.startLabel.text = MovieInfo?.startDate
+            cell.tagLabel.text = MovieInfo?.tags[0]
 //            cell.timeLabel.text = "월요일, 수요일 19:30 ~ 22:30"
 //            cell.preparationLabel.text = "xcode 9이 설치된 Mac"
 //            cell.locationLabel.text = course?.location
@@ -148,5 +167,4 @@ extension ProductDetailViewController: UITableViewDelegate {
             return UITableViewAutomaticDimension
         }
     }
-    
 }
